@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+import "proto/memory.proto";
+
+option go_package="github.com/kiritocyanpine/grpctest";
+
+message Storage {
+    enum Driver {
+        UNKNOWN = 0;
+        SSD = 1;
+        HDD = 2;
+    }
+
+    Driver driver = 1;
+    Memory memory = 2;
+}
