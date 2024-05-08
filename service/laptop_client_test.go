@@ -37,6 +37,14 @@ func TestClientTest(t *testing.T) {
 	require.NotNil(t, val)
 
 	compareLaptops(t, val, laptop)
+
+	// laptop dosent exist
+	laptopNew := sample.NewLaptop()
+	val, err = server.Store.Find(laptopNew.Id)
+
+	require.Error(t, err)
+	require.ErrorIs(t, err, service.ErrNotFound)
+	require.Nil(t, val)
 }
 
 func compareLaptops(t *testing.T, lap1, lap2 *grpctest.Laptop) {

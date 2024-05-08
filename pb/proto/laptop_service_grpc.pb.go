@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type LaptopServiceClient interface {
 	CreateLaptop(ctx context.Context, in *CreateLaptopRequest, opts ...grpc.CallOption) (*CreateLaptopResponse, error)
+	GetLaptop(ctx context.Context, in *GetLaptopListRequest, opts ...grpc.CallOption) (*GetLaptopListResponse, error)
 }
 
 type laptopServiceClient struct {
@@ -42,11 +43,21 @@ func (c *laptopServiceClient) CreateLaptop(ctx context.Context, in *CreateLaptop
 	return out, nil
 }
 
+func (c *laptopServiceClient) GetLaptop(ctx context.Context, in *GetLaptopListRequest, opts ...grpc.CallOption) (*GetLaptopListResponse, error) {
+	out := new(GetLaptopListResponse)
+	err := c.cc.Invoke(ctx, "/LaptopService/GetLaptop", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // LaptopServiceServer is the server API for LaptopService service.
 // All implementations must embed UnimplementedLaptopServiceServer
 // for forward compatibility
 type LaptopServiceServer interface {
 	CreateLaptop(context.Context, *CreateLaptopRequest) (*CreateLaptopResponse, error)
+	GetLaptop(context.Context, *GetLaptopListRequest) (*GetLaptopListResponse, error)
 	mustEmbedUnimplementedLaptopServiceServer()
 }
 
@@ -56,6 +67,9 @@ type UnimplementedLaptopServiceServer struct {
 
 func (UnimplementedLaptopServiceServer) CreateLaptop(context.Context, *CreateLaptopRequest) (*CreateLaptopResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateLaptop not implemented")
+}
+func (UnimplementedLaptopServiceServer) GetLaptop(context.Context, *GetLaptopListRequest) (*GetLaptopListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLaptop not implemented")
 }
 func (UnimplementedLaptopServiceServer) mustEmbedUnimplementedLaptopServiceServer() {}
 
@@ -88,6 +102,24 @@ func _LaptopService_CreateLaptop_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _LaptopService_GetLaptop_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetLaptopListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LaptopServiceServer).GetLaptop(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/LaptopService/GetLaptop",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LaptopServiceServer).GetLaptop(ctx, req.(*GetLaptopListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // LaptopService_ServiceDesc is the grpc.ServiceDesc for LaptopService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -98,6 +130,10 @@ var LaptopService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateLaptop",
 			Handler:    _LaptopService_CreateLaptop_Handler,
+		},
+		{
+			MethodName: "GetLaptop",
+			Handler:    _LaptopService_GetLaptop_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

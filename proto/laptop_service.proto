@@ -15,4 +15,13 @@ message CreateLaptopResponse {
 
 service LaptopService {
     rpc CreateLaptop(CreateLaptopRequest) returns (CreateLaptopResponse) {};
+    rpc GetLaptop(GetLaptopListRequest) returns (GetLaptopListResponse) {};
+}
+
+message GetLaptopListRequest{
+
+}
+
+message GetLaptopListResponse{
+    repeated Laptop laptops = 1;
 }

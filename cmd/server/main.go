@@ -22,7 +22,7 @@ func main() {
 	grpcserver := grpc.NewServer()
 	grpctest.RegisterLaptopServiceServer(grpcserver, laptopserver)
 
-	address := fmt.Sprintf("0.0.0.0:%d", 8080)
+	address := fmt.Sprintf("0.0.0.0:%d", 8081)
 
 	listener, err := net.Listen("tcp", address)
 	if err != nil {

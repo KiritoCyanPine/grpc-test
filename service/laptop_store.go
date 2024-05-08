@@ -16,6 +16,8 @@ type LaptopStore interface {
 	Save(laptop *grpctest.Laptop) error
 
 	Find(id string) (*grpctest.Laptop, error)
+
+	GetAll() []*grpctest.Laptop
 }
 
 type InMemoryLaptopStore struct {
@@ -62,6 +64,18 @@ func (store *InMemoryLaptopStore) Find(id string) (*grpctest.Laptop, error) {
 	}
 
 	return cache, nil
+}
+
+func (store *InMemoryLaptopStore) GetAll() []*grpctest.Laptop {
+	store.mutex.Lock()
+	defer store.mutex.Unlock()
+
+	s := []*grpctest.Laptop{}
+	for _, v := range store.data {
+		s = append(s, v)
+	}
+
+	return s
 }
 
 func CreateInMemoryLaptopStore() *InMemoryLaptopStore {

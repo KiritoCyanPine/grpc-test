@@ -57,3 +57,16 @@ func (server *LaptopServer) CreateLaptop(
 
 	return res, nil
 }
+
+func (server *LaptopServer) GetLaptop(
+	ctx context.Context,
+	req *grpctest.GetLaptopListRequest,
+) (*grpctest.GetLaptopListResponse, error) {
+	cache := server.Store.GetAll()
+
+	res := &grpctest.GetLaptopListResponse{
+		Laptops: cache,
+	}
+
+	return res, nil
+}
