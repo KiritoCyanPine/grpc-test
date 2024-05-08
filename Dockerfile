@@ -10,4 +10,4 @@ RUN ["go", "build", "-o", "server", "/app/cmd/server/"]
 
 RUN go test -cover ./...
 
-CMD [ "./server" ]
+CMD [ "./server", "-port", ,"8080"]
